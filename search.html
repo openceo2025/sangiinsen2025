@@ -19,15 +19,12 @@
   <main>
     <section class="search-section">
       <h2>政党から探す</h2>
-      <form action="candidate_list.html" method="get">
-        <select name="party">
-          <option value="">選択してください</option>
-          <option value="partyA">党A</option>
-          <option value="partyB">党B</option>
-          <option value="partyC">党C</option>
-        </select>
-        <button type="submit">検索</button>
-      </form>
+        <form action="candidate_list.html" method="get">
+          <select name="party" id="party-select">
+            <option value="">選択してください</option>
+          </select>
+          <button type="submit">検索</button>
+        </form>
     </section>
     <section class="search-section">
       <h2>選挙区から探す</h2>
@@ -52,5 +49,6 @@
   <footer>
     <p>&copy; 2025 都議選候補者情報サイト</p>
   </footer>
+  <script src="js/script.js"></script>
 </body>
 </html>
