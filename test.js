@@ -10,12 +10,12 @@ function loadDistrictData() {
 }
 
 const data = loadDistrictData();
-assert.strictEqual(data.length, 3);
+assert.strictEqual(data.length, 42);
 const map = {};
 data.forEach(row => {
   const [district, ...zips] = row;
   zips.forEach(z => { map[z] = district; });
 });
-assert.strictEqual(map['1000001'], '選挙区1');
+assert.strictEqual(map['1000000'], '千代田区');
 console.log('All tests passed');
 
