@@ -20,16 +20,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadCandidates() {
     try {
-      const res = await fetch('candidates.csv');
+      const res = await fetch('list.csv');
       const text = await res.text();
       const lines = text.trim().split(/\r?\n/);
       const headers = lines.shift().split(',');
       return lines.filter(Boolean).map(line => {
         const values = line.split(',');
-        const obj = {};
+        const raw = {};
         headers.forEach((h, idx) => {
-          obj[h.trim()] = values[idx] ? values[idx].trim() : '';
+          raw[h.trim()] = values[idx] ? values[idx].trim() : '';
         });
+        const obj = {
+          name: raw['氏名'] || raw['name'] || '',
+          age: raw['年齢'] || raw['age'] || '',
+          party: raw['所属政党'] || raw['party'] || '',
+          affiliation: raw['所属会派'] || '',
+          district: raw['選挙区'] || raw['district'] || '',
+          relation: raw['統一教会との関わり'] || '',
+          reference: raw['出展'] || '',
+        };
         obj.id = simpleHash(obj.name + obj.party + obj.age);
         return obj;
       });
@@ -126,6 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>政党: ${candidate.party}</p>
         <p>選挙区: ${candidate.district}</p>
         <p>年齢: ${candidate.age}</p>
+        ${candidate.relation ? `<p>統一教会との関わり: ${candidate.relation}</p>` : ''}
+        ${candidate.reference ? `<p>出展: ${candidate.reference}</p>` : ''}
       `;
     } else {
       detail.textContent = '候補者情報が見つかりません。';

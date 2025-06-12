@@ -8,7 +8,7 @@
 - `search.html` - 候補者検索ページ
 - `candidate_list.html` - 検索結果表示ページ
 - `candidate_detail.html` - 候補者詳細ページ
-- `candidates.csv` - 候補者データ
+- `list.csv` - 候補者データ
 - `parties.csv` - 政党名一覧
 - `districts.csv` - 選挙区と地名の対応表
 - `css/` - スタイルシート
@@ -16,6 +16,6 @@
 
 ## 使い方
 ブラウザで `index.html` を開くとトップページが表示されます。検索ページから政党や選挙区を指定すると、候補者リストページに遷移します。
-候補者データは `candidates.csv` から、政党名は `parties.csv` から自動的に読み込まれます。
+候補者データは `list.csv` から、政党名は `parties.csv` から自動的に読み込まれます。
 
 今後、実際の候補者データを追加し、検索機能や詳細情報を充実させる予定です。
