@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>候補者検索 - 2025都議選</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>候補者を探す</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">ホーム</a></li>
+        <li><a href="search.html">候補者を探す</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="search-section">
+      <h2>政党から探す</h2>
+      <form action="candidate_list.html" method="get">
+        <select name="party">
+          <option value="">選択してください</option>
+          <option value="partyA">党A</option>
+          <option value="partyB">党B</option>
+          <option value="partyC">党C</option>
+        </select>
+        <button type="submit">検索</button>
+      </form>
+    </section>
+    <section class="search-section">
+      <h2>選挙区から探す</h2>
+      <form action="candidate_list.html" method="get">
+        <select name="district">
+          <option value="">選択してください</option>
+          <option value="district1">選挙区1</option>
+          <option value="district2">選挙区2</option>
+          <option value="district3">選挙区3</option>
+        </select>
+        <button type="submit">検索</button>
+      </form>
+    </section>
+    <section class="search-section">
+      <h2>郵便番号から探す</h2>
+      <form action="candidate_list.html" method="get">
+        <input type="text" name="zipcode" placeholder="例: 1000000">
+        <button type="submit">検索</button>
+      </form>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 都議選候補者情報サイト</p>
+  </footer>
+</body>
+</html>
