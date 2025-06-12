@@ -50,6 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  async function loadDistrictData() {
+    if (loadDistrictData.cache) return loadDistrictData.cache;
+    const lines = await loadList('districts.csv');
+    const data = lines.map(l => l.split(',').map(s => s.trim()).filter(Boolean));
+    loadDistrictData.cache = data;
+    return data;
+  }
+
   async function populatePartyList() {
     const select = document.getElementById('party-select');
     if (!select) return;
@@ -66,11 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
   async function populateDistrictList() {
     const select = document.getElementById('district-select');
     if (!select) return;
-    const districts = await loadList('districts.csv');
-    districts.forEach(d => {
+    const data = await loadDistrictData();
+    data.forEach(row => {
+      const district = row[0];
       const opt = document.createElement('option');
-      opt.value = d;
-      opt.textContent = d;
+      opt.value = district;
+      opt.textContent = district;
       select.appendChild(opt);
     });
   }
@@ -78,8 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
   async function populateZipcodeList() {
     const datalist = document.getElementById('zipcode-list');
     if (!datalist) return;
-    const zips = await loadList('zipcodes.csv');
-    zips.forEach(z => {
+    const data = await loadDistrictData();
+    const set = new Set();
+    data.forEach(row => row.slice(1).forEach(zip => set.add(zip)));
+    set.forEach(z => {
       const opt = document.createElement('option');
       opt.value = z;
       datalist.appendChild(opt);
@@ -89,10 +100,22 @@ document.addEventListener('DOMContentLoaded', () => {
   async function showCandidateList() {
     const list = document.getElementById('candidate-list');
     if (!list) return;
+    const districtData = await loadDistrictData();
+    let districtFromZip = null;
+    const zip = params.get('zipcode');
+    if (zip) {
+      for (const row of districtData) {
+        if (row.slice(1).includes(zip)) {
+          districtFromZip = row[0];
+          break;
+        }
+      }
+    }
+
     const candidates = (await loadCandidates()).filter(c => {
       if (params.get('party') && c.party !== params.get('party')) return false;
       if (params.get('district') && c.district !== params.get('district')) return false;
-      if (params.get('zipcode') && c.zipcode !== params.get('zipcode')) return false;
+      if (districtFromZip && c.district !== districtFromZip) return false;
       return true;
     });
     candidates.forEach(c => {

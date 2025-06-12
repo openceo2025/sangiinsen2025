@@ -1,8 +1,21 @@
 const fs = require('fs');
 const assert = require('assert');
-function loadList(file) {
-  return fs.readFileSync(file, 'utf8').trim().split(/\r?\n/).filter(Boolean);
+
+function loadDistrictData() {
+  return fs.readFileSync('districts.csv', 'utf8')
+    .trim()
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map(line => line.split(',').map(v => v.trim()));
 }
-assert.strictEqual(loadList('districts.csv').length, 3);
-assert.strictEqual(loadList('zipcodes.csv').length, 3);
+
+const data = loadDistrictData();
+assert.strictEqual(data.length, 3);
+const map = {};
+data.forEach(row => {
+  const [district, ...zips] = row;
+  zips.forEach(z => { map[z] = district; });
+});
+assert.strictEqual(map['1000001'], '選挙区1');
 console.log('All tests passed');
+
