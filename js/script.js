@@ -2,8 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const condition = document.getElementById('condition');
   if (condition) {
-    const condText = ['party', 'district']
-      .map(k => params.get(k) ? `${k}: ${params.get(k)}` : null)
+    const condText = ['party', 'district', 'relation']
+      .map(k => {
+        if (!params.get(k)) return null;
+        if (k === 'relation') return '統一教会との関わり報道あり';
+        return `${k}: ${params.get(k)}`;
+      })
       .filter(Boolean)
       .join(', ');
     condition.textContent = condText || '指定なし';
@@ -107,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const candidates = (await loadCandidates()).filter(c => {
       if (params.get('party') && c.party !== params.get('party')) return false;
       if (params.get('district') && c.district !== params.get('district')) return false;
+      if (params.get('relation') === 'true' && !c.relation) return false;
       return true;
     });
     candidates.forEach(c => {
@@ -117,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>政党: ${c.party}</p>
         <p>選挙区: ${c.district}</p>
         <p>年齢: ${c.age}</p>
+        <p class="relation ${c.relation ? 'has-relation' : ''}">統一教会との関わり報道: ${c.relation ? 'あり' : 'なし'}</p>
         <p><a href="candidate_detail.html?id=${c.id}">詳細</a></p>
       `;
       list.appendChild(div);

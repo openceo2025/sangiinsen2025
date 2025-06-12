@@ -85,3 +85,9 @@ button:hover {
 .search-section {
   margin-bottom: 1.5rem;
 }
+
+/* highlight relation to Unification Church on list page */
+.relation.has-relation {
+  color: red;
+  font-weight: bold;
+}
