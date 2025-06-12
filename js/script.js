@@ -39,6 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  async function loadList(file) {
+    try {
+      const res = await fetch(file);
+      const text = await res.text();
+      return text.trim().split(/\r?\n/).filter(Boolean);
+    } catch (e) {
+      console.error('CSV読み込みエラー', e);
+      return [];
+    }
+  }
+
   async function populatePartyList() {
     const select = document.getElementById('party-select');
     if (!select) return;
@@ -49,6 +60,29 @@ document.addEventListener('DOMContentLoaded', () => {
       opt.value = p;
       opt.textContent = p;
       select.appendChild(opt);
+    });
+  }
+
+  async function populateDistrictList() {
+    const select = document.getElementById('district-select');
+    if (!select) return;
+    const districts = await loadList('districts.csv');
+    districts.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d;
+      select.appendChild(opt);
+    });
+  }
+
+  async function populateZipcodeList() {
+    const datalist = document.getElementById('zipcode-list');
+    if (!datalist) return;
+    const zips = await loadList('zipcodes.csv');
+    zips.forEach(z => {
+      const opt = document.createElement('option');
+      opt.value = z;
+      datalist.appendChild(opt);
     });
   }
 
@@ -94,6 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   populatePartyList();
+  populateDistrictList();
+  populateZipcodeList();
   showCandidateList();
   showCandidateDetail();
 });

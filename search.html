@@ -29,11 +29,8 @@
     <section class="search-section">
       <h2>選挙区から探す</h2>
       <form action="candidate_list.html" method="get">
-        <select name="district">
+        <select name="district" id="district-select">
           <option value="">選択してください</option>
-          <option value="district1">選挙区1</option>
-          <option value="district2">選挙区2</option>
-          <option value="district3">選挙区3</option>
         </select>
         <button type="submit">検索</button>
       </form>
@@ -41,7 +38,8 @@
     <section class="search-section">
       <h2>郵便番号から探す</h2>
       <form action="candidate_list.html" method="get">
-        <input type="text" name="zipcode" placeholder="例: 1000000">
+        <input type="text" name="zipcode" list="zipcode-list" placeholder="例: 1000000">
+        <datalist id="zipcode-list"></datalist>
         <button type="submit">検索</button>
       </form>
     </section>
