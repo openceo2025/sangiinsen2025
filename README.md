@@ -9,13 +9,13 @@
 - `candidate_list.html` - 検索結果表示ページ
 - `candidate_detail.html` - 候補者詳細ページ
 - `candidates.csv` - 候補者データ
-- `districts.csv` - 選挙区と郵便番号の対応表
+- `districts.csv` - 選挙区と地名の対応表
+- `13TOKYO.CSV` - 東京都内の郵便番号データ
 - `css/` - スタイルシート
 - `js/` - JavaScript
 
 ## 使い方
 ブラウザで `index.html` を開くとトップページが表示されます。検索ページから政党や選挙区、郵便番号を指定すると、候補者リストページに遷移します。
-候補者データは `candidates.csv` から自動的に読み込まれます。選挙区と郵便番号は
-`districts.csv` から取得されます。
+候補者データは `candidates.csv` から自動的に読み込まれます。郵便番号の検索では `13TOKYO.CSV` から地名を取得し、その地名に対応する選挙区を `districts.csv` から参照します。
 
 今後、実際の候補者データを追加し、検索機能や詳細情報を充実させる予定です。

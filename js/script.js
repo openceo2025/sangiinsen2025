@@ -58,6 +58,22 @@ document.addEventListener('DOMContentLoaded', () => {
     return data;
   }
 
+  async function loadZipMap() {
+    if (loadZipMap.cache) return loadZipMap.cache;
+    const res = await fetch('13TOKYO.CSV');
+    const text = await res.text();
+    const lines = text.trim().split(/\r?\n/);
+    const map = {};
+    lines.forEach(line => {
+      const cols = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+      const zip = cols[2].replace(/"/g, '');
+      const city = cols[7].replace(/"/g, '');
+      map[zip] = city;
+    });
+    loadZipMap.cache = map;
+    return map;
+  }
+
   async function populatePartyList() {
     const select = document.getElementById('party-select');
     if (!select) return;
@@ -84,31 +100,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  async function populateZipcodeList() {
-    const select = document.getElementById('zipcode-select');
-    if (!select) return;
-    const data = await loadDistrictData();
-    const set = new Set();
-    data.forEach(row => row.slice(1).forEach(zip => set.add(zip)));
-    set.forEach(z => {
-      const opt = document.createElement('option');
-      opt.value = z;
-      opt.textContent = z;
-      select.appendChild(opt);
-    });
+  async function populateZipcodeInput() {
+    // テキスト入力なので特に初期化処理は不要
   }
 
   async function showCandidateList() {
     const list = document.getElementById('candidate-list');
     if (!list) return;
     const districtData = await loadDistrictData();
+    const zipMap = await loadZipMap();
     let districtFromZip = null;
     const zip = params.get('zipcode');
     if (zip) {
-      for (const row of districtData) {
-        if (row.slice(1).includes(zip)) {
-          districtFromZip = row[0];
-          break;
+      const place = zipMap[zip];
+      if (place) {
+        for (const row of districtData) {
+          if (row.slice(1).includes(place)) {
+            districtFromZip = row[0];
+            break;
+          }
         }
       }
     }
@@ -153,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   populatePartyList();
   populateDistrictList();
-  populateZipcodeList();
+  populateZipcodeInput();
   showCandidateList();
   showCandidateDetail();
 });
