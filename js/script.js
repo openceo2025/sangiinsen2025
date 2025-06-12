@@ -9,22 +9,22 @@ document.addEventListener('DOMContentLoaded', () => {
     condition.textContent = condText || '指定なし';
   }
 
-  const table = document.getElementById('candidate-table');
-  if (table) {
-    const tbody = table.querySelector('tbody');
+  const list = document.getElementById('candidate-list');
+  if (list) {
     const candidates = [
       { name: '候補者A', party: '党A', district: '選挙区1' },
       { name: '候補者B', party: '党B', district: '選挙区2' }
     ];
     candidates.forEach(c => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${c.name}</td>
-        <td>${c.party}</td>
-        <td>${c.district}</td>
-        <td><a href="candidate_detail.html">詳細</a></td>
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+        <h3>${c.name}</h3>
+        <p>政党: ${c.party}</p>
+        <p>選挙区: ${c.district}</p>
+        <p><a href="candidate_detail.html">詳細</a></p>
       `;
-      tbody.appendChild(tr);
+      list.appendChild(div);
     });
   }
 });

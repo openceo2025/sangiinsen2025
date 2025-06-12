@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>候補者検索 - 2025都議選</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -16,7 +17,7 @@
     </nav>
   </header>
   <main>
-    <section>
+    <section class="search-section">
       <h2>政党から探す</h2>
       <form action="candidate_list.html" method="get">
         <select name="party">
@@ -28,7 +29,7 @@
         <button type="submit">検索</button>
       </form>
     </section>
-    <section>
+    <section class="search-section">
       <h2>選挙区から探す</h2>
       <form action="candidate_list.html" method="get">
         <select name="district">
@@ -40,7 +41,7 @@
         <button type="submit">検索</button>
       </form>
     </section>
-    <section>
+    <section class="search-section">
       <h2>郵便番号から探す</h2>
       <form action="candidate_list.html" method="get">
         <input type="text" name="zipcode" placeholder="例: 1000000">
