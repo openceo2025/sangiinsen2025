@@ -85,15 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function populateZipcodeList() {
-    const datalist = document.getElementById('zipcode-list');
-    if (!datalist) return;
+    const select = document.getElementById('zipcode-select');
+    if (!select) return;
     const data = await loadDistrictData();
     const set = new Set();
     data.forEach(row => row.slice(1).forEach(zip => set.add(zip)));
     set.forEach(z => {
       const opt = document.createElement('option');
       opt.value = z;
-      datalist.appendChild(opt);
+      opt.textContent = z;
+      select.appendChild(opt);
     });
   }
 
