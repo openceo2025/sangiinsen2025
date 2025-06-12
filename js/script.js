@@ -9,19 +9,53 @@ document.addEventListener('DOMContentLoaded', () => {
     condition.textContent = condText || '指定なし';
   }
 
-  function loadCandidates() {
-    const data = localStorage.getItem('candidates');
-    if (!data) return [];
+  function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash << 5) - hash + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return 'c' + Math.abs(hash);
+  }
+
+  async function loadCandidates() {
     try {
-      return JSON.parse(data);
+      const res = await fetch('candidates.csv');
+      const text = await res.text();
+      const lines = text.trim().split(/\r?\n/);
+      const headers = lines.shift().split(',');
+      return lines.filter(Boolean).map(line => {
+        const values = line.split(',');
+        const obj = {};
+        headers.forEach((h, idx) => {
+          obj[h.trim()] = values[idx] ? values[idx].trim() : '';
+        });
+        obj.id = simpleHash(obj.name + obj.party + obj.age);
+        return obj;
+      });
     } catch (e) {
+      console.error('CSV読み込みエラー', e);
       return [];
     }
   }
 
-  const list = document.getElementById('candidate-list');
-  if (list) {
-    const candidates = loadCandidates().filter(c => {
+  async function populatePartyList() {
+    const select = document.getElementById('party-select');
+    if (!select) return;
+    const candidates = await loadCandidates();
+    const parties = [...new Set(candidates.map(c => c.party))];
+    parties.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      select.appendChild(opt);
+    });
+  }
+
+  async function showCandidateList() {
+    const list = document.getElementById('candidate-list');
+    if (!list) return;
+    const candidates = (await loadCandidates()).filter(c => {
       if (params.get('party') && c.party !== params.get('party')) return false;
       if (params.get('district') && c.district !== params.get('district')) return false;
       if (params.get('zipcode') && c.zipcode !== params.get('zipcode')) return false;
@@ -41,10 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const detail = document.getElementById('candidate-detail');
-  if (detail) {
+  async function showCandidateDetail() {
+    const detail = document.getElementById('candidate-detail');
+    if (!detail) return;
     const id = params.get('id');
-    const candidate = loadCandidates().find(c => c.id === id);
+    const candidate = (await loadCandidates()).find(c => c.id === id);
+
     if (candidate) {
       detail.innerHTML = `
         <h2>${candidate.name}</h2>
@@ -56,4 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
       detail.textContent = '候補者情報が見つかりません。';
     }
   }
+
+  populatePartyList();
+  showCandidateList();
+  showCandidateDetail();
 });
