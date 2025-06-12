@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>2025年東京都議選 候補者情報サイト</title>
+  <title>候補者CSVアップロード</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>
-    <h1>2025年東京都議選 候補者情報サイト</h1>
+    <h1>候補者CSVアップロード</h1>
     <nav>
       <ul>
         <li><a href="index.html">ホーム</a></li>
@@ -18,12 +18,13 @@
     </nav>
   </header>
   <main>
-    <p>2025年東京都議会議員選挙の候補者情報を提供するサイトです。</p>
-    <p>政党別、選挙区別、郵便番号などから候補者を検索できます。</p>
-    <a class="btn" href="search.html">候補者を探す</a>
+    <p>CSVファイルを選択してください。ヘッダー行には列名を、2行目以降に候補者情報を記述してください。</p>
+    <input type="file" id="csvfile" accept=".csv">
+    <p id="upload-result"></p>
   </main>
   <footer>
     <p>&copy; 2025 都議選候補者情報サイト</p>
   </footer>
+  <script src="js/upload.js"></script>
 </body>
 </html>

@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!detail) return;
     const id = params.get('id');
     const candidate = (await loadCandidates()).find(c => c.id === id);
+
     if (candidate) {
       detail.innerHTML = `
         <h2>${candidate.name}</h2>
