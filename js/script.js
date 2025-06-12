@@ -58,11 +58,17 @@ document.addEventListener('DOMContentLoaded', () => {
     return data;
   }
 
+  async function loadPartyList() {
+    if (loadPartyList.cache) return loadPartyList.cache;
+    const lines = await loadList('parties.csv');
+    loadPartyList.cache = lines;
+    return lines;
+  }
+
   async function populatePartyList() {
     const select = document.getElementById('party-select');
     if (!select) return;
-    const candidates = await loadCandidates();
-    const parties = [...new Set(candidates.map(c => c.party))];
+    const parties = await loadPartyList();
     parties.forEach(p => {
       const opt = document.createElement('option');
       opt.value = p;
