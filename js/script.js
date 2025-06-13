@@ -79,14 +79,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function populatePartyList() {
-    const select = document.getElementById('party-select');
-    if (!select) return;
     const parties = await loadPartyList();
-    parties.forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p;
-      opt.textContent = p;
-      select.appendChild(opt);
+    ['party-select', 'pr-party-select'].forEach(id => {
+      const select = document.getElementById(id);
+      if (!select) return;
+      parties.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        select.appendChild(opt);
+      });
     });
   }
 
