@@ -14,6 +14,10 @@ header {
 header h1 {
   margin: 0;
 }
+header .tagline {
+  margin: 0.3rem 0 0;
+  font-size: 0.9rem;
+}
 nav ul {
   list-style: none;
   padding: 0;
