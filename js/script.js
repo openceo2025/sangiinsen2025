@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
           name: raw['氏名'] || raw['name'] || '',
           age: raw['年齢'] || raw['age'] || '',
           party: raw['所属政党'] || raw['party'] || '',
-          affiliation: raw['所属会派'] || '',
+          recommendation: raw['推薦'] || '',
           district: raw['選挙区'] || raw['district'] || '',
           relation: raw['統一教会との関わり'] || '',
           reference: raw['出展'] || '',
@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
       div.innerHTML = `
         <h3>${c.name}</h3>
         <p>政党: ${c.party}</p>
+        ${c.recommendation ? `<p>推薦: ${c.recommendation}</p>` : ''}
         <p>選挙区: ${c.district}</p>
         <p>年齢: ${c.age}</p>
         ${c.relation ? `<p class="relation has-relation">統一教会との関わり報道: あり</p>` : ''}
@@ -139,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
       detail.innerHTML = `
         <h2>${candidate.name}</h2>
         <p>政党: ${candidate.party}</p>
+        ${candidate.recommendation ? `<p>推薦: ${candidate.recommendation}</p>` : ''}
         <p>選挙区: ${candidate.district}</p>
         <p>年齢: ${candidate.age}</p>
         ${candidate.relation ? `<p>統一教会との関わり: ${candidate.relation}</p>` : ''}
