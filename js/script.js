@@ -2,10 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const condition = document.getElementById('condition');
   if (condition) {
-    const condText = ['party', 'district', 'relation']
+    const condText = ['party', 'district', 'relation', 'secret']
       .map(k => {
         if (!params.get(k)) return null;
         if (k === 'relation') return '統一教会との関わり報道あり';
+        if (k === 'secret') return '裏金不記載報道あり';
         return `${k}: ${params.get(k)}`;
       })
       .filter(Boolean)
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
           district: raw['選挙区'] || raw['district'] || '',
           relation: raw['統一教会との関わり'] || '',
           reference: raw['出展'] || '',
+          secretMoney: raw['裏金不記載額'] || '',
         };
         obj.id = simpleHash(obj.name + obj.party + obj.age);
         return obj;
@@ -112,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (params.get('party') && c.party !== params.get('party')) return false;
       if (params.get('district') && c.district !== params.get('district')) return false;
       if (params.get('relation') === 'true' && !c.relation) return false;
+      if (params.get('secret') === 'true' && !c.secretMoney) return false;
       return true;
     });
     candidates.forEach(c => {
@@ -124,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>選挙区: ${c.district}</p>
         <p>年齢: ${c.age}</p>
         ${c.relation ? `<p class="relation has-relation">統一教会との関わり報道: あり</p>` : ''}
+        ${c.secretMoney ? `<p class="secret-money has-secret">裏金不記載額: ${c.secretMoney}</p>` : ''}
         <p><a href="candidate_detail.html?id=${c.id}">詳細</a></p>
       `;
       list.appendChild(div);
@@ -144,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>選挙区: ${candidate.district}</p>
         <p>年齢: ${candidate.age}</p>
         ${candidate.relation ? `<p>統一教会との関わり: ${candidate.relation}</p>` : ''}
+        ${candidate.secretMoney ? `<p class="secret-money has-secret">裏金不記載額: ${candidate.secretMoney}</p>` : ''}
         ${candidate.reference ? `<p>出展: ${candidate.reference}</p>` : ''}
       `;
     } else {

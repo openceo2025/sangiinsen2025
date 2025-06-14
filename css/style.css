@@ -95,3 +95,8 @@ button:hover {
   color: red;
   font-weight: bold;
 }
+/* highlight undeclared funds info */
+.secret-money.has-secret {
+  color: red;
+  font-weight: bold;
+}
