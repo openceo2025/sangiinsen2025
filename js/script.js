@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>政党: ${c.party}</p>
         <p>選挙区: ${c.district}</p>
         <p>年齢: ${c.age}</p>
-        <p class="relation ${c.relation ? 'has-relation' : ''}">統一教会との関わり報道: ${c.relation ? 'あり' : 'なし'}</p>
+        ${c.relation ? `<p class="relation has-relation">統一教会との関わり報道: あり</p>` : ''}
         <p><a href="candidate_detail.html?id=${c.id}">詳細</a></p>
       `;
       list.appendChild(div);
