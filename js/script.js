@@ -80,15 +80,35 @@ document.addEventListener('DOMContentLoaded', () => {
     return lines;
   }
 
+  async function loadProportionalData() {
+    if (loadProportionalData.cache) return loadProportionalData.cache;
+    const lines = await loadList('pr.csv');
+    if (lines.length === 0) return [];
+    const headers = lines.shift().split(',');
+    const data = lines.map(line => {
+      const values = line.split(',');
+      const obj = {};
+      headers.forEach((h, idx) => {
+        obj[h.trim()] = values[idx] ? values[idx].trim() : '';
+      });
+      return obj;
+    });
+    loadProportionalData.cache = data;
+    return data;
+  }
+
   async function populatePartyList() {
-    const select = document.getElementById('party-select');
-    if (!select) return;
+    const ids = ['party-select', 'pr-party-select'];
+    const selects = ids.map(id => document.getElementById(id)).filter(Boolean);
+    if (selects.length === 0) return;
     const parties = await loadPartyList();
-    parties.forEach(p => {
-      const opt = document.createElement('option');
-      opt.value = p;
-      opt.textContent = p;
-      select.appendChild(opt);
+    selects.forEach(sel => {
+      parties.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        sel.appendChild(opt);
+      });
     });
   }
 
@@ -156,8 +176,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  async function showProportionalList() {
+    const list = document.getElementById('pr-list');
+    if (!list) return;
+    const party = params.get('pr_party');
+    const data = (await loadProportionalData()).filter(p => !party || p['政党'] === party);
+    const nameEl = document.getElementById('pr-party-name');
+    if (nameEl && party) nameEl.textContent = party;
+    data.forEach(row => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `<p>${row['順位']}位 ${row['氏名']}</p>`;
+      list.appendChild(div);
+    });
+  }
+
   populatePartyList();
   populateDistrictList();
   showCandidateList();
   showCandidateDetail();
+  showProportionalList();
 });

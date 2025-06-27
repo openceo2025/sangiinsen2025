@@ -34,12 +34,21 @@
         <select name="district" id="district-select">
           <option value="">選択してください</option>
         </select>
-        <button type="submit">検索</button>
-      </form>
-    </section>
-    <section class="search-section">
-      <h2>統一教会との関わりが報道された候補者</h2>
-      <form action="candidate_list.html" method="get">
+      <button type="submit">検索</button>
+    </form>
+  </section>
+  <section class="search-section">
+    <h2>比例名簿を見る</h2>
+    <form action="pr_list.html" method="get">
+      <select name="pr_party" id="pr-party-select">
+        <option value="">選択してください</option>
+      </select>
+      <button type="submit">表示</button>
+    </form>
+  </section>
+  <section class="search-section">
+    <h2>統一教会との関わりが報道された候補者</h2>
+    <form action="candidate_list.html" method="get">
         <input type="hidden" name="relation" value="true">
         <button type="submit">表示</button>
       </form>
