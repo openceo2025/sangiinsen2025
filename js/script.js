@@ -30,6 +30,16 @@ document.addEventListener('DOMContentLoaded', () => {
     '社会民主党': 2
   };
 
+  const prefectureOrder = [
+    '北海道', '青森', '岩手', '宮城', '秋田', '山形', '福島',
+    '茨城', '栃木', '群馬', '埼玉', '千葉', '東京', '神奈川',
+    '新潟', '富山', '石川', '福井', '山梨', '長野', '岐阜',
+    '静岡', '愛知', '三重', '滋賀', '京都', '大阪', '兵庫',
+    '奈良', '和歌山', '鳥取・島根', '岡山', '広島', '山口',
+    '徳島・高知', '香川', '愛媛', '福岡', '佐賀', '長崎',
+    '熊本', '大分', '宮崎', '鹿児島', '沖縄'
+  ];
+
   function compareBySeat(a, b) {
     const diff = (seatCounts[b] || 0) - (seatCounts[a] || 0);
     if (diff !== 0) return diff;
@@ -111,7 +121,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const districts = (await loadCandidates())
       .map(c => c.district.trim())
       .filter(d => d && !d.includes('比例'));
-    const unique = Array.from(new Set(districts)).sort();
+    const unique = Array.from(new Set(districts)).sort((a, b) => {
+      const ia = prefectureOrder.indexOf(a);
+      const ib = prefectureOrder.indexOf(b);
+      if (ia === -1 && ib === -1) return a.localeCompare(b, 'ja');
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
     loadDistrictData.cache = unique;
     return unique;
   }
