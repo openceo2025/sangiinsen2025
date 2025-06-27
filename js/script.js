@@ -86,17 +86,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadDistrictData() {
     if (loadDistrictData.cache) return loadDistrictData.cache;
-    const lines = await loadList('districts.csv');
-    const data = lines.map(l => l.split(',').map(s => s.trim()).filter(Boolean));
-    loadDistrictData.cache = data;
-    return data;
+    const districts = (await loadCandidates())
+      .map(c => c.district.trim())
+      .filter(d => d && !d.includes('比例'));
+    const unique = Array.from(new Set(districts)).sort();
+    loadDistrictData.cache = unique;
+    return unique;
   }
 
   async function loadPartyList() {
     if (loadPartyList.cache) return loadPartyList.cache;
-    const lines = await loadList('parties.csv');
-    loadPartyList.cache = lines;
-    return lines;
+    const parties = (await loadCandidates())
+      .map(c => c.party.trim())
+      .filter(Boolean);
+    const unique = Array.from(new Set(parties)).sort();
+    loadPartyList.cache = unique;
+    return unique;
   }
 
   async function loadProportionalData() {
@@ -124,9 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
   async function populateDistrictList() {
     const select = document.getElementById('district-select');
     if (!select) return;
-    const data = await loadDistrictData();
-    data.forEach(row => {
-      const district = row[0];
+    const districts = await loadDistrictData();
+    districts.forEach(district => {
       const opt = document.createElement('option');
       opt.value = district;
       opt.textContent = district;
