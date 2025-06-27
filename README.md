@@ -11,14 +11,14 @@
 - `pr_list.html` - 比例名簿ページ
 - `candidate_detail.html` - 候補者詳細ページ
 - `candidates.csv` - 候補者データ（選挙区・比例を含む）
-- `parties.csv` - 政党名一覧
-- `districts.csv` - 選挙区と地名の対応表
+- `parties.csv` - 政党名一覧（参考用）
+- `districts.csv` - 選挙区一覧（参考用）
 - `css/` - スタイルシート
 - `js/` - JavaScript
 
 ## 使い方
 ブラウザで `index.html` を開くとトップページが表示されます。検索ページから政党や選挙区を指定すると、候補者リストページに遷移します。
-候補者データは `candidates.csv` から、政党名は `parties.csv` から自動的に読み込まれます。
+候補者データは `candidates.csv` から読み込み、政党名と選挙区の一覧もこのファイルから生成されます。
 比例名簿もこのCSVから取得し、検索ページで政党を選ぶと `pr_list.html` に表示されます。
 
 今後、実際の候補者データを追加し、検索機能や詳細情報を充実させる予定です。
