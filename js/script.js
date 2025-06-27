@@ -14,6 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
     condition.textContent = condText || '指定なし';
   }
 
+  const seatCounts = {
+    '自由民主党': 309,
+    '立憲': 186,
+    '維新': 55,
+    '公明': 51,
+    '国民': 39,
+    '共産': 19,
+    'れいわ': 14,
+    '無所属': 14,
+    '参政': 4,
+    '日本保守党（代表者：百田尚樹）': 3,
+    '日本保守党（代表者：石濱哲信）': 3,
+    'N国': 2,
+    '社会民主党': 2
+  };
+
+  function compareBySeat(a, b) {
+    const diff = (seatCounts[b] || 0) - (seatCounts[a] || 0);
+    if (diff !== 0) return diff;
+    return a.localeCompare(b, 'ja');
+  }
+
   function simpleHash(str) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -99,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const parties = (await loadCandidates())
       .map(c => c.party.trim())
       .filter(Boolean);
-    const unique = Array.from(new Set(parties)).sort();
+    const unique = Array.from(new Set(parties)).sort(compareBySeat);
     loadPartyList.cache = unique;
     return unique;
   }
@@ -109,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const parties = (await loadProportionalData())
       .map(c => c.party.trim())
       .filter(Boolean);
-    const unique = Array.from(new Set(parties)).sort();
+    const unique = Array.from(new Set(parties)).sort(compareBySeat);
     loadPrPartyList.cache = unique;
     return unique;
   }
