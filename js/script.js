@@ -104,6 +104,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return unique;
   }
 
+  async function loadPrPartyList() {
+    if (loadPrPartyList.cache) return loadPrPartyList.cache;
+    const parties = (await loadProportionalData())
+      .map(c => c.party.trim())
+      .filter(Boolean);
+    const unique = Array.from(new Set(parties)).sort();
+    loadPrPartyList.cache = unique;
+    return unique;
+  }
+
   async function loadProportionalData() {
     if (loadProportionalData.cache) return loadProportionalData.cache;
     const data = (await loadCandidates()).filter(c => c.district && c.district.includes('比例'));
@@ -112,18 +122,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function populatePartyList() {
-    const ids = ['party-select', 'pr-party-select'];
-    const selects = ids.map(id => document.getElementById(id)).filter(Boolean);
-    if (selects.length === 0) return;
-    const parties = await loadPartyList();
-    selects.forEach(sel => {
+    const partySelect = document.getElementById('party-select');
+    if (partySelect) {
+      const parties = await loadPartyList();
       parties.forEach(p => {
         const opt = document.createElement('option');
         opt.value = p;
         opt.textContent = p;
-        sel.appendChild(opt);
+        partySelect.appendChild(opt);
       });
-    });
+    }
+
+    const prSelect = document.getElementById('pr-party-select');
+    if (prSelect) {
+      const prParties = await loadPrPartyList();
+      prParties.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        prSelect.appendChild(opt);
+      });
+    }
   }
 
   async function populateDistrictList() {
