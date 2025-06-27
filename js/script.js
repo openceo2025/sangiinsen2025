@@ -25,6 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadCandidates() {
     try {
+      if (window.candidatesData) {
+        return window.candidatesData.map(raw => {
+          const obj = {
+            name: raw['name'] || raw['氏名'] || '',
+            age: raw['age'] || raw['年齢'] || '',
+            party: raw['party'] || raw['所属政党'] || '',
+            recommendation: raw['recommendation'] || raw['推薦'] || '',
+            district: raw['district'] || raw['選挙区'] || '',
+            proportionalRank: raw['proportional_rank'] || raw['順位'] || '',
+            relation: raw['relation'] || raw['統一教会との関わり'] || '',
+            reference: raw['reference'] || raw['出展'] || '',
+            secretMoney: raw['secret_money'] || raw['裏金不記載額'] || '',
+          };
+          obj.id = simpleHash(obj.name + obj.party + obj.age);
+          return obj;
+        });
+      }
+
       const res = await fetch('candidates.csv');
       const text = await res.text();
       const lines = text.trim().split(/\r?\n/);
