@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadCandidates() {
     try {
-      const res = await fetch('list.csv');
+      const res = await fetch('candidates.csv');
       const text = await res.text();
       const lines = text.trim().split(/\r?\n/);
       const headers = lines.shift().split(',');
@@ -36,14 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
           raw[h.trim()] = values[idx] ? values[idx].trim() : '';
         });
         const obj = {
-          name: raw['氏名'] || raw['name'] || '',
-          age: raw['年齢'] || raw['age'] || '',
-          party: raw['所属政党'] || raw['party'] || '',
-          recommendation: raw['推薦'] || '',
-          district: raw['選挙区'] || raw['district'] || '',
-          relation: raw['統一教会との関わり'] || '',
-          reference: raw['出展'] || '',
-          secretMoney: raw['裏金不記載額'] || '',
+          name: raw['name'] || raw['氏名'] || '',
+          age: raw['age'] || raw['年齢'] || '',
+          party: raw['party'] || raw['所属政党'] || '',
+          recommendation: raw['recommendation'] || raw['推薦'] || '',
+          district: raw['district'] || raw['選挙区'] || '',
+          proportionalRank: raw['proportional_rank'] || raw['順位'] || '',
+          relation: raw['relation'] || raw['統一教会との関わり'] || '',
+          reference: raw['reference'] || raw['出展'] || '',
+          secretMoney: raw['secret_money'] || raw['裏金不記載額'] || '',
         };
         obj.id = simpleHash(obj.name + obj.party + obj.age);
         return obj;
@@ -82,17 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadProportionalData() {
     if (loadProportionalData.cache) return loadProportionalData.cache;
-    const lines = await loadList('pr.csv');
-    if (lines.length === 0) return [];
-    const headers = lines.shift().split(',');
-    const data = lines.map(line => {
-      const values = line.split(',');
-      const obj = {};
-      headers.forEach((h, idx) => {
-        obj[h.trim()] = values[idx] ? values[idx].trim() : '';
-      });
-      return obj;
-    });
+    const data = (await loadCandidates()).filter(c => c.district && c.district.includes('比例'));
     loadProportionalData.cache = data;
     return data;
   }
@@ -180,13 +171,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = document.getElementById('pr-list');
     if (!list) return;
     const party = params.get('pr_party');
-    const data = (await loadProportionalData()).filter(p => !party || p['政党'] === party);
+    const data = (await loadProportionalData()).filter(p => !party || p.party === party);
     const nameEl = document.getElementById('pr-party-name');
     if (nameEl && party) nameEl.textContent = party;
     data.forEach(row => {
       const div = document.createElement('div');
       div.className = 'card';
-      div.innerHTML = `<p>${row['順位']}位 ${row['氏名']}</p>`;
+      const rank = row.proportionalRank ? `${row.proportionalRank}位 ` : '';
+      div.innerHTML = `<p>${rank}${row.name}</p>`;
       list.appendChild(div);
     });
   }
