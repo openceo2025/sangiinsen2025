@@ -257,8 +257,17 @@ document.addEventListener('DOMContentLoaded', () => {
     data.forEach(row => {
       const div = document.createElement('div');
       div.className = 'card';
-      const rank = row.proportionalRank ? `${row.proportionalRank}位 ` : '';
-      div.innerHTML = `<p>${rank}${row.name}</p>`;
+      div.innerHTML = `
+        <h3>${row.name}</h3>
+        ${row.proportionalRank ? `<p>順位: ${row.proportionalRank}</p>` : ''}
+        <p>政党: ${row.party}</p>
+        ${row.recommendation ? `<p>推薦: ${row.recommendation}</p>` : ''}
+        <p>選挙区: ${row.district}</p>
+        <p>年齢: ${row.age}</p>
+        ${row.relation ? `<p class="relation has-relation">統一教会との関わり報道: あり</p>` : ''}
+        ${row.secretMoney ? `<p class="secret-money has-secret">裏金不記載額: ${row.secretMoney}</p>` : ''}
+        <p><a href="candidate_detail.html?id=${row.id}">詳細</a></p>
+      `;
       list.appendChild(div);
     });
   }
